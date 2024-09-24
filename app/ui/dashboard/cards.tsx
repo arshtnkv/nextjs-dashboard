@@ -5,7 +5,7 @@ import {
   InboxIcon,
 } from '@heroicons/react/24/outline';
 import { lusitana } from '@/app/ui/fonts';
-import {fetchCardData} from '@/app/lib/data';
+import { fetchCardData } from '@/app/lib/data';
 
 const iconMap = {
   collected: BanknotesIcon,
@@ -14,33 +14,40 @@ const iconMap = {
   invoices: InboxIcon,
 };
 
+type CardType = 'collected' | 'pending' | 'invoices' | 'customers';
+
+interface CardData {
+  title: string;
+  value: number | string;
+  type: CardType;
+}
+
 export default async function CardWrapper() {
-  const {numberOfCustomers, numberOfInvoices, totalPaidInvoices, totalPendingInvoices} = await fetchCardData();
+  const { numberOfCustomers, numberOfInvoices, totalPaidInvoices, totalPendingInvoices } = await fetchCardData();
+
+  // Создаём массив объектов для карт с явным указанием типов
+  const cardsData: CardData[] = [
+    { title: 'Собрано', value: totalPaidInvoices, type: 'collected' },
+    { title: 'В ожидании', value: totalPendingInvoices, type: 'pending' },
+    { title: 'Всего счетов', value: numberOfInvoices, type: 'invoices' },
+    { title: 'Всего клиентов', value: numberOfCustomers, type: 'customers' },
+  ];
+
   return (
     <>
-      {/* NOTE: Uncomment this code in Chapter 9 */}
-
-      <Card title="Collected" value={totalPaidInvoices} type="collected" />
-      <Card title="Pending" value={totalPendingInvoices} type="pending" />
-      <Card title="Total Invoices" value={numberOfInvoices} type="invoices" />
-      <Card
-        title="Total Customers"
-        value={numberOfCustomers}
-        type="customers"
-      />
+      {cardsData.map((card) => (
+        <Card
+          key={card.type} // Используйте уникальный идентификатор, если он доступен
+          title={card.title}
+          value={card.value}
+          type={card.type}
+        />
+      ))}
     </>
   );
 }
 
-export function Card({
-  title,
-  value,
-  type,
-}: {
-  title: string;
-  value: number | string;
-  type: 'invoices' | 'customers' | 'pending' | 'collected';
-}) {
+export function Card({ title, value, type }: { title: string; value: number | string; type: CardType; }) {
   const Icon = iconMap[type];
 
   return (
@@ -50,8 +57,7 @@ export function Card({
         <h3 className="ml-2 text-sm font-medium">{title}</h3>
       </div>
       <p
-        className={`${lusitana.className}
-          truncate rounded-xl bg-white px-4 py-8 text-center text-2xl`}
+        className={`${lusitana.className} truncate rounded-xl bg-white px-4 py-8 text-center text-2xl`}
       >
         {value}
       </p>

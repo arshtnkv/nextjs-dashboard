@@ -23,7 +23,7 @@ export default async function RevenueChart() {
   return (
     <div className="w-full md:col-span-4">
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
-        Recent Revenue
+        Недавний доход
       </h2>
       {/* NOTE: Uncomment this code in Chapter 7 */}
 
@@ -54,7 +54,7 @@ export default async function RevenueChart() {
         </div>
         <div className="flex items-center pb-2 pt-6">
           <CalendarIcon className="h-5 w-5 text-gray-500" />
-          <h3 className="ml-2 text-sm text-gray-500 ">Last 12 months</h3>
+          <h3 className="ml-2 text-sm text-gray-500 ">Последние 12 месяцев</h3>
         </div>
       </div>
     </div>
